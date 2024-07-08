@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  name     String?
+  password String
+  posts    Post[]
+}
+
+model Post {
+  id        String  @id @default(uuid())
+  title     String
+  content   String
+  published Boolean @default(false)
+  author    User    @relation(fields: [authorId], references: [id])
+  // this is hoe authorid from post is related to id of User
+  authorId  String
+}
+
+
+
+// if your npx prisma migrate dev --name init_schema
+// did not work you can push the cod on the github and then pull it to any aws machine where you can ru this command to generate migaration and one the migratons folder is created on the aws machine push it to the github and then pull it to your machine 
+
+// what happen you run the command is that you actually migated the prisma schema it acutally ran it over there in your avien datas bas created the neccessary enteis there
